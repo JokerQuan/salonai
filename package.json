@@ -4,7 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "concurrently -n api,web -c cyan,magenta \"pnpm --filter api start:dev\" \"pnpm --filter web dev\"",
+    "build": "pnpm -r --if-present build",
+    "test": "pnpm -r --if-present test",
+    "lint": "pnpm -r --if-present lint",
+    "format": "prettier --write .",
+    "db:migrate": "prisma migrate dev --schema prisma/schema.prisma",
+    "api:generate": "orval --config orval.config.ts",
+    "cli:health": "pnpm --filter cli health",
+    "docker:up": "docker compose -f infra/docker-compose.yml up"
   },
   "keywords": [],
   "author": "",
@@ -16,5 +24,14 @@
       "onFail": "download"
     }
   },
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "orval": "^8.12.3",
+    "prettier": "^3.8.3",
+    "prisma": "^7.8.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^7.8.0"
+  }
 }

@@ -1,0 +1,7 @@
+### SalonAI API health
+GET http://localhost:3000/health
+Accept: application/json
+
+### SalonAI OpenAPI JSON
+GET http://localhost:3000/openapi.json
+Accept: application/json
