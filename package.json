@@ -8,6 +8,7 @@
     "build": "pnpm -r --if-present build",
     "test": "pnpm -r --if-present test",
     "lint": "pnpm -r --if-present lint",
+    "ci": "pnpm lint && pnpm test && pnpm build && pnpm exec prisma validate --schema prisma/schema.prisma",
     "format": "prettier --write .",
     "db:migrate": "prisma migrate dev --schema prisma/schema.prisma",
     "api:generate": "orval --config orval.config.ts",
