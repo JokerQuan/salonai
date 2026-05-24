@@ -6,7 +6,63 @@ datasource db {
   provider = "postgresql"
 }
 
+enum ModelProviderKind {
+  MOCK
+  OPENAI_COMPATIBLE
+}
+
+enum ModelCallStatus {
+  SUCCESS
+  ERROR
+}
+
 model MigrationSmoke {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
+}
+
+model ModelConfig {
+  id                       String            @id @default(cuid())
+  name                     String            @unique
+  providerKind             ModelProviderKind
+  model                    String
+  baseUrl                  String?
+  apiKeyEnvName            String?
+  enabled                  Boolean           @default(true)
+  priority                 Int               @default(100)
+  inputTokenPriceUsdPer1K  Decimal           @default(0) @db.Decimal(12, 8)
+  outputTokenPriceUsdPer1K Decimal           @default(0) @db.Decimal(12, 8)
+  createdAt                DateTime          @default(now())
+  updatedAt                DateTime          @updatedAt
+  calls                    ModelCall[]
+
+  @@index([enabled, priority])
+  @@index([providerKind])
+}
+
+model ModelCall {
+  id                   String            @id @default(cuid())
+  modelConfigId        String?
+  modelConfig          ModelConfig?      @relation(fields: [modelConfigId], references: [id], onDelete: SetNull)
+  tenantId             String?
+  userId               String?
+  providerKind         ModelProviderKind
+  model                String
+  status               ModelCallStatus
+  inputTokens          Int               @default(0)
+  outputTokens         Int               @default(0)
+  totalTokens          Int               @default(0)
+  costUsd              Decimal           @default(0) @db.Decimal(12, 8)
+  latencyMs            Int               @default(0)
+  langfuseTraceId      String?
+  langfuseGenerationId String?
+  errorCode            String?
+  errorMessage         String?
+  metadata             Json?
+  createdAt            DateTime          @default(now())
+
+  @@index([createdAt])
+  @@index([tenantId, createdAt])
+  @@index([modelConfigId, createdAt])
+  @@index([status, createdAt])
 }

@@ -1,32 +1,36 @@
 .app-shell {
   min-height: 100vh;
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
   padding: 32px;
-  background: #f7f7f4;
-  color: #1f2933;
+  background: #eef3f7;
+  color: #182026;
 }
 
-.health-panel {
-  width: min(720px, 100%);
-  border: 1px solid #d8ddd2;
+.status-panel,
+.gateway-panel {
+  width: min(960px, 100%);
+  border: 1px solid #d6dee5;
   border-radius: 8px;
   background: #ffffff;
-  padding: 32px;
-  box-shadow: 0 12px 32px rgb(31 41 51 / 8%);
+  padding: 28px;
+  box-shadow: 0 14px 32px rgb(24 32 38 / 8%);
 }
 
 .eyebrow {
   margin: 0 0 12px;
-  color: #5b6b73;
+  color: #526675;
   font-size: 0.875rem;
   text-transform: uppercase;
   letter-spacing: 0;
 }
 
-.health-panel h1 {
+.status-panel h1,
+.gateway-panel h2 {
   margin: 0 0 24px;
-  font-size: 2rem;
+  font-size: 1.9rem;
   line-height: 1.2;
   letter-spacing: 0;
 }
@@ -39,18 +43,21 @@
 }
 
 .health-grid div {
-  border: 1px solid #e3e7df;
+  border: 1px solid #dfe7ee;
   border-radius: 8px;
   padding: 16px;
+  background: #fbfcfd;
 }
 
-.health-grid dt {
+.health-grid dt,
+.result-grid dt {
   margin-bottom: 8px;
-  color: #5b6b73;
+  color: #526675;
   font-size: 0.875rem;
 }
 
-.health-grid dd {
+.health-grid dd,
+.result-grid dd {
   margin: 0;
   overflow-wrap: anywhere;
   font-weight: 600;
@@ -62,7 +69,7 @@
 }
 
 .muted {
-  color: #5b6b73;
+  color: #526675;
 }
 
 .ok {
@@ -71,4 +78,123 @@
 
 .error {
   color: #b42318;
+}
+
+.panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.provider-pill {
+  flex: 0 1 auto;
+  max-width: 420px;
+  margin: 0;
+  border: 1px solid #bfd8c9;
+  border-radius: 999px;
+  padding: 8px 12px;
+  color: #155c3b;
+  background: #edf8f1;
+  font-size: 0.875rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.gateway-form {
+  display: grid;
+  gap: 12px;
+}
+
+.gateway-form label {
+  color: #26343d;
+  font-weight: 700;
+}
+
+.gateway-form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+  min-height: 132px;
+  border: 1px solid #c8d3dc;
+  border-radius: 8px;
+  padding: 14px;
+  color: #182026;
+  background: #fbfcfd;
+  font: inherit;
+  line-height: 1.5;
+}
+
+.gateway-form textarea:focus {
+  outline: 3px solid #b9d7ff;
+  border-color: #2f74c0;
+}
+
+.action-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.action-row button {
+  min-height: 44px;
+  border: 0;
+  border-radius: 8px;
+  padding: 0 18px;
+  color: #ffffff;
+  background: #1f6f8b;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.action-row button:disabled {
+  cursor: not-allowed;
+  background: #8aa3b2;
+}
+
+.completion-result {
+  margin-top: 24px;
+  border-top: 1px solid #dfe7ee;
+  padding-top: 24px;
+}
+
+.completion-result > p {
+  margin: 0 0 18px;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.result-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin: 0;
+}
+
+.result-grid div {
+  min-width: 0;
+  border-left: 3px solid #8db9d3;
+  padding-left: 12px;
+}
+
+@media (max-width: 640px) {
+  .app-shell {
+    padding: 18px;
+  }
+
+  .status-panel,
+  .gateway-panel {
+    padding: 20px;
+  }
+
+  .panel-header {
+    display: grid;
+  }
+
+  .provider-pill {
+    max-width: 100%;
+  }
 }

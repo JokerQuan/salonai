@@ -1,0 +1,27 @@
+### List enabled model configs
+GET http://localhost:3000/model-gateway/configs
+Accept: application/json
+
+### Create real model completion
+POST http://localhost:3000/model-gateway/completions
+Content-Type: application/json
+Accept: application/json
+
+{
+  "messages": [
+    {
+      "role": "system",
+      "content": "你是 SalonAI 的模型网关调试助手。"
+    },
+    {
+      "role": "user",
+      "content": "用一句话介绍模型网关的价值。"
+    }
+  ],
+  "temperature": 0.2,
+  "maxOutputTokens": 256,
+  "traceName": "http.day1.model-gateway",
+  "metadata": {
+    "source": "http"
+  }
+}

@@ -5,6 +5,36 @@
  * SalonAI Agent API
  * OpenAPI spec version: 0.0.0
  */
+import {
+  useMutation,
+  useQuery
+} from '@tanstack/react-query';
+import type {
+  MutationFunction,
+  QueryFunction,
+  QueryKey,
+  UseMutationOptions,
+  UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult
+} from '@tanstack/react-query';
+
+import type {
+  CreateModelCompletionDto,
+  ModelCompletionResponseDto,
+  ModelConfigSummaryDto
+} from './model';
+
+import { salonaiFetch } from '../fetcher';
+
+type AwaitedInput<T> = PromiseLike<T> | T;
+
+      type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
+
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 export type appControllerGetHelloResponse200 = {
   data: void
@@ -28,21 +58,64 @@ export const getAppControllerGetHelloUrl = () => {
 
 export const appControllerGetHello = async ( options?: RequestInit): Promise<appControllerGetHelloResponse> => {
 
-  const res = await fetch(getAppControllerGetHelloUrl(),
+  return salonaiFetch<appControllerGetHelloResponse>(getAppControllerGetHelloUrl(),
   {
     ...options,
     method: 'GET'
 
 
   }
-)
+);}
 
 
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
 
-  const data: appControllerGetHelloResponse['data'] = body ? JSON.parse(body) : undefined
-  return { data, status: res.status, headers: res.headers } as appControllerGetHelloResponse
+
+
+export const getAppControllerGetHelloQueryKey = () => {
+    return [
+    `/`
+    ] as const;
+    }
+
+
+export const getAppControllerGetHelloQueryOptions = <TData = Awaited<ReturnType<typeof appControllerGetHello>>, TError = unknown>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof appControllerGetHello>>, TError, TData>, request?: SecondParameter<typeof salonaiFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getAppControllerGetHelloQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof appControllerGetHello>>> = ({ signal }) => appControllerGetHello({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof appControllerGetHello>>, TError, TData> & { queryKey: QueryKey }
 }
+
+export type AppControllerGetHelloQueryResult = NonNullable<Awaited<ReturnType<typeof appControllerGetHello>>>
+export type AppControllerGetHelloQueryError = unknown
+
+
+
+export function useAppControllerGetHello<TData = Awaited<ReturnType<typeof appControllerGetHello>>, TError = unknown>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof appControllerGetHello>>, TError, TData>, request?: SecondParameter<typeof salonaiFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getAppControllerGetHelloQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
 
 
 
@@ -68,21 +141,235 @@ export const getHealthControllerGetHealthUrl = () => {
 
 export const healthControllerGetHealth = async ( options?: RequestInit): Promise<healthControllerGetHealthResponse> => {
 
-  const res = await fetch(getHealthControllerGetHealthUrl(),
+  return salonaiFetch<healthControllerGetHealthResponse>(getHealthControllerGetHealthUrl(),
   {
     ...options,
     method: 'GET'
 
 
   }
-)
+);}
 
 
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
 
-  const data: healthControllerGetHealthResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as healthControllerGetHealthResponse
+
+
+export const getHealthControllerGetHealthQueryKey = () => {
+    return [
+    `/health`
+    ] as const;
+    }
+
+
+export const getHealthControllerGetHealthQueryOptions = <TData = Awaited<ReturnType<typeof healthControllerGetHealth>>, TError = unknown>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof healthControllerGetHealth>>, TError, TData>, request?: SecondParameter<typeof salonaiFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getHealthControllerGetHealthQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof healthControllerGetHealth>>> = ({ signal }) => healthControllerGetHealth({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof healthControllerGetHealth>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type HealthControllerGetHealthQueryResult = NonNullable<Awaited<ReturnType<typeof healthControllerGetHealth>>>
+export type HealthControllerGetHealthQueryError = unknown
+
+
+
+export function useHealthControllerGetHealth<TData = Awaited<ReturnType<typeof healthControllerGetHealth>>, TError = unknown>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof healthControllerGetHealth>>, TError, TData>, request?: SecondParameter<typeof salonaiFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getHealthControllerGetHealthQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
 }
 
 
+
+
+
+
+
+export type listModelConfigsResponse200 = {
+  data: ModelConfigSummaryDto[]
+  status: 200
+}
+
+export type listModelConfigsResponseSuccess = (listModelConfigsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type listModelConfigsResponse = (listModelConfigsResponseSuccess)
+
+export const getListModelConfigsUrl = () => {
+
+
+
+
+  return `/model-gateway/configs`
+}
+
+/**
+ * @summary List enabled model configs
+ */
+export const listModelConfigs = async ( options?: RequestInit): Promise<listModelConfigsResponse> => {
+
+  return salonaiFetch<listModelConfigsResponse>(getListModelConfigsUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListModelConfigsQueryKey = () => {
+    return [
+    `/model-gateway/configs`
+    ] as const;
+    }
+
+
+export const getListModelConfigsQueryOptions = <TData = Awaited<ReturnType<typeof listModelConfigs>>, TError = unknown>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listModelConfigs>>, TError, TData>, request?: SecondParameter<typeof salonaiFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListModelConfigsQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listModelConfigs>>> = ({ signal }) => listModelConfigs({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listModelConfigs>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListModelConfigsQueryResult = NonNullable<Awaited<ReturnType<typeof listModelConfigs>>>
+export type ListModelConfigsQueryError = unknown
+
+
+/**
+ * @summary List enabled model configs
+ */
+
+export function useListModelConfigs<TData = Awaited<ReturnType<typeof listModelConfigs>>, TError = unknown>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listModelConfigs>>, TError, TData>, request?: SecondParameter<typeof salonaiFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListModelConfigsQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export type createModelCompletionResponse201 = {
+  data: ModelCompletionResponseDto
+  status: 201
+}
+
+export type createModelCompletionResponseSuccess = (createModelCompletionResponse201) & {
+  headers: Headers;
+};
+;
+
+export type createModelCompletionResponse = (createModelCompletionResponseSuccess)
+
+export const getCreateModelCompletionUrl = () => {
+
+
+
+
+  return `/model-gateway/completions`
+}
+
+/**
+ * @summary Create a non-streaming model completion
+ */
+export const createModelCompletion = async (createModelCompletionDto: CreateModelCompletionDto, options?: RequestInit): Promise<createModelCompletionResponse> => {
+
+  return salonaiFetch<createModelCompletionResponse>(getCreateModelCompletionUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(createModelCompletionDto)
+  }
+);}
+
+
+
+
+export const getCreateModelCompletionMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createModelCompletion>>, TError,{data: CreateModelCompletionDto}, TContext>, request?: SecondParameter<typeof salonaiFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof createModelCompletion>>, TError,{data: CreateModelCompletionDto}, TContext> => {
+
+const mutationKey = ['createModelCompletion'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createModelCompletion>>, {data: CreateModelCompletionDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createModelCompletion(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateModelCompletionMutationResult = NonNullable<Awaited<ReturnType<typeof createModelCompletion>>>
+    export type CreateModelCompletionMutationBody = CreateModelCompletionDto
+    export type CreateModelCompletionMutationError = unknown
+
+    /**
+ * @summary Create a non-streaming model completion
+ */
+export const useCreateModelCompletion = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createModelCompletion>>, TError,{data: CreateModelCompletionDto}, TContext>, request?: SecondParameter<typeof salonaiFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof createModelCompletion>>,
+        TError,
+        {data: CreateModelCompletionDto},
+        TContext
+      > => {
+      return useMutation(getCreateModelCompletionMutationOptions(options));
+    }
 

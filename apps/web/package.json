@@ -10,7 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@salonai/api-client": "workspace:*",
     "@salonai/shared": "workspace:*",
+    "@tanstack/react-query": "^5.100.13",
     "react": "^19.2.6",
     "react-dom": "^19.2.6"
   },

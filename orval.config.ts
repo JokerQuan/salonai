@@ -7,8 +7,14 @@ export default defineConfig({
       mode: 'split',
       target: 'packages/api-client/src/generated/salonai.ts',
       schemas: 'packages/api-client/src/generated/model',
-      client: 'fetch',
+      client: 'react-query',
       clean: true,
+      override: {
+        mutator: {
+          path: './packages/api-client/src/fetcher.ts',
+          name: 'salonaiFetch',
+        },
+      },
     },
   },
 });
